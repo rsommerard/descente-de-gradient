@@ -1,4 +1,4 @@
-# Descente de gradient stochastique
+# Descente de gradient
 
 - Implémenter les 2 algorithmes
   - Descente de gradient globale (ou Batch)
