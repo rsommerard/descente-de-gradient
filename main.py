@@ -19,13 +19,13 @@ def print_results():
   print '-' * 80
   print 'y = {0}'.format(y)
   print '-' * 80
-  print 'theta = {0}'.format(theta())
+  print 'theta() = {0}'.format(theta())
   print '-' * 80
-  print 'f_theta = {0}'.format(f_theta())
+  print 'f_theta() = {0}'.format(f_theta())
   print '-' * 80
-  print 'j_theta = {0}'.format(j_theta())
+  print 'j_theta() = {0}'.format(j_theta())
   print '-' * 80
-  print 'j_theta = {0}'.format(j_theta())
+  print 'gradient_descent_batch() = {0}'.format(gradient_descent_batch())
   print '-' * 80
 
 def theta():
