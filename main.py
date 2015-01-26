@@ -41,7 +41,7 @@ def j_theta():
 def gradient_descent_batch():
   xres = numpy.zeros(N)
   
-  for i in range(1,75):
+  for i in range(1,N):
     xres = xres - ((1.0/(1000*i)) * j_theta())
   
   return xres
