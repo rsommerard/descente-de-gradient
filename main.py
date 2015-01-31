@@ -13,46 +13,60 @@ def load_data():
 
 def print_results():
   print '-' * 80
-  print 'N = {0}'.format(N)
+  print 'N: \n{0}'.format(N)
   print '-' * 80
-  print 'x = {0}'.format(x)
+  print 'x: \n{0}'.format(x)
   print '-' * 80
-  print 'y = {0}'.format(y)
-  print '-' * 80
-  print 'theta() = {0}'.format(theta())
-  print '-' * 80
-  print 'f_theta() = {0}'.format(f_theta())
-  print '-' * 80
-  print 'j_theta() = {0}'.format(j_theta())
-  print '-' * 80
-  print 'gradient_descent_batch() = {0}'.format(gradient_descent_batch())
+  print 'y: \n{0}'.format(y)
   print '-' * 80
 
 def theta():
   return numpy.dot(numpy.linalg.inv(numpy.dot(x, x.T)), numpy.dot(x, y))
 
-def f_theta():
-  return numpy.dot(theta().T, x)
+def f_theta(theta):
+  return numpy.dot(theta.T, x)
 
-def j_theta():
-  tmp = (y - numpy.dot(x.T, theta()))
+def pas(val):
+  A = 100.0
+  B = 1
+  C = 10000
+  return ((A/(C + (B * val))))
+
+def j_theta(theta):
+  tmp = (y - numpy.dot(x.T, theta))
+  # numpy.dot(tmp.T, tmp) = le carré
   return ((1.0/N) * numpy.dot(tmp.T, tmp))
   
-def gradient_descent_batch():
-  xres = numpy.zeros(N)
-  
-  for i in range(1,N):
-    xres = xres - ((1.0/(1000*i)) * j_theta())
-  
-  return xres
+#Theta moindres carrees = [1.95293789, 3.59623499]
+def batch_gradient_descent():
+  theta = [0, 0]
+  f = [theta]
+
+  error = j_theta(theta)
+
+  i = 1
+  while (abs(error) < 10e4):
+    theta = theta + (pas(i) * (1.0/N) * numpy.dot(x, (y - numpy.dot(x.T, theta))))
+    f.append(theta)
+    i+=1
+    error = error - j_theta(theta)
+
+  # theta = [1.95293789, 3.59623499]
+  print "theta = ", theta
+  return f
 
 def print_graphs():
+  pyplot.figure(1)
+  pyplot.title('Batch Gradient Descent')
+  pyplot.grid(True)
+  res = batch_gradient_descent()
+  pyplot.plot(res)
+
+  pyplot.figure(2)
   pyplot.plot(t, p, '.')
-  pyplot.plot(t, f_theta())
+  pyplot.plot(t, f_theta(theta()))
   pyplot.ylabel('position (m)')
   pyplot.xlabel('temps (s)')
-  pyplot.show()
-  pyplot.plot(range(0,N), gradient_descent_batch())
   pyplot.show()
 
 def main():
