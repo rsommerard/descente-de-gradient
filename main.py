@@ -2,6 +2,7 @@
 
 import numpy
 from matplotlib import pyplot
+import random
 
 def load_data():
   global x, y, N, t, p
@@ -26,10 +27,16 @@ def theta():
 def f_theta(theta):
   return numpy.dot(theta.T, x)
 
-def pas(val):
+def pas_batch(val):
   A = 100.0
   B = 1
   C = 10000
+  return ((A/(C + (B * val))))
+
+def pas_stochastique(val):
+  A = 1.0
+  B = 100
+  C = 2000
   return ((A/(C + (B * val))))
 
 def j_theta(theta):
@@ -40,33 +47,59 @@ def j_theta(theta):
 #Theta moindres carrees = [1.95293789, 3.59623499]
 def batch_gradient_descent():
   theta = [0, 0]
-  f = [theta]
+  bf = [theta]
 
   error = j_theta(theta)
 
   i = 1
   while (abs(error) < 10e4):
-    theta = theta + (pas(i) * (1.0/N) * numpy.dot(x, (y - numpy.dot(x.T, theta))))
-    f.append(theta)
+    theta = theta + (pas_batch(i) * (1.0/N) * numpy.dot(x, (y - numpy.dot(x.T, theta))))
+    bf.append(theta)
     i+=1
     error = error - j_theta(theta)
 
   # theta = [1.95293789, 3.59623499]
-  print "theta = ", theta
-  return f
+  print "Batch theta = ", theta
+  return bf
+
+def stochastique_gradient_descent():
+  theta = numpy.array([0, 0])
+  sf = [theta]
+
+  error = j_theta(theta)
+
+  for i in range(0, N-1):
+    theta = theta + (pas_stochastique(i) * numpy.dot([[x[0][i]],[1]], (y[i] - numpy.dot(theta.T,[[x[0][i]],[1]]))))
+    error = error - j_theta(theta)
+    sf.append(theta)
+
+  print "Stochastique theta = ", theta
+  return sf
 
 def print_graphs():
-  pyplot.figure(1)
-  pyplot.title('Batch Gradient Descent')
-  pyplot.grid(True)
-  res = batch_gradient_descent()
-  pyplot.plot(res)
+  batch_res = batch_gradient_descent()
+  stochastique_res = stochastique_gradient_descent()
 
-  pyplot.figure(2)
+  pyplot.figure(1)
   pyplot.plot(t, p, '.')
-  pyplot.plot(t, f_theta(theta()))
+  pyplot.plot(t, f_theta(theta()), label="MC")
+  pyplot.plot(t, f_theta(batch_res[-1]), '--', label="BGD")
+  pyplot.plot(t, f_theta(stochastique_res[-1]), '--', label="SGD")
+  pyplot.legend()
+  pyplot.grid(True)
   pyplot.ylabel('position (m)')
   pyplot.xlabel('temps (s)')
+
+  pyplot.figure(2)
+  pyplot.title('Batch Gradient Descent')
+  pyplot.grid(True)
+  pyplot.plot(batch_res)
+
+  pyplot.figure(3)
+  pyplot.title('Stochastique Gradient Descent')
+  pyplot.grid(True)
+  pyplot.plot(stochastique_res)
+
   pyplot.show()
 
 def main():
@@ -76,3 +109,4 @@ def main():
 
 if __name__ == '__main__':
   main()
+  
