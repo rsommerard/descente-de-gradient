@@ -36,7 +36,7 @@ def pas_batch(val):
 def pas_stochastique(val):
   A = 1.0
   B = 100
-  C = 2000
+  C = 1000
   return ((A/(C + (B * val))))
 
 def j_theta(theta):
@@ -46,7 +46,7 @@ def j_theta(theta):
   
 #Theta moindres carrees = [1.95293789, 3.59623499]
 def batch_gradient_descent():
-  theta = [0, 0]
+  theta = [1, 1]
   bf = [theta]
 
   error = j_theta(theta)
@@ -63,17 +63,18 @@ def batch_gradient_descent():
   return bf
 
 def stochastique_gradient_descent():
-  theta = numpy.array([0, 0])
+  theta = numpy.array([1, 1])
   sf = [theta]
 
   error = j_theta(theta)
 
   for i in range(0, N-1):
-    theta = theta + (pas_stochastique(i) * numpy.dot([[x[0][i]],[1]], (y[i] - numpy.dot(theta.T,[[x[0][i]],[1]]))))
+    theta = theta + (pas_stochastique(i) * numpy.dot([[x[0][i]], [1]], (y[i] - numpy.dot(theta.T,[[x[0][i]],[1]]))))
     error = error - j_theta(theta)
     sf.append(theta)
+    print theta
 
-  print "Stochastique theta = ", theta
+  print "Stochastic theta = ", theta
   return sf
 
 def print_graphs():
