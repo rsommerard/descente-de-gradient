@@ -49,14 +49,16 @@ def batch_gradient_descent():
   theta = [1, 1]
   bf = [theta]
 
-  error = j_theta(theta)
+  previous = j_theta(theta)
+  current = previous + 1
 
   i = 1
-  while (abs(error) < 10e4):
+  while (previous != current):
+    previous = current
     theta = theta + (pas_batch(i) * (1.0/N) * numpy.dot(x, (y - numpy.dot(x.T, theta))))
     bf.append(theta)
     i+=1
-    error = error - j_theta(theta)
+    current = j_theta(theta)
 
   # theta = [1.95293789, 3.59623499]
   print "Batch theta = ", theta
