@@ -34,9 +34,9 @@ def pas_batch(val):
   return ((A/(C + (B * val))))
 
 def pas_stochastique(val):
-  A = 1.0
-  B = 100
-  C = 1000
+  A = 0.1
+  B = 1
+  C = 0.0001
   return ((A/(C + (B * val))))
 
 def j_theta(theta):
@@ -72,7 +72,6 @@ def stochastique_gradient_descent():
     theta = theta + (pas_stochastique(i) * numpy.dot([[x[0][i]], [1]], (y[i] - numpy.dot(theta.T,[[x[0][i]],[1]]))))
     error = error - j_theta(theta)
     sf.append(theta)
-    print theta
 
   print "Stochastic theta = ", theta
   return sf
